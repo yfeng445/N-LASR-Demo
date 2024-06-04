@@ -1,4 +1,4 @@
-# N-LASR-Demo
+# NLASR-Demo
 
 NLASR stands for Non-Linear Adaptive Style Rotation Model. It is a stock selection model that Deutsche Bank Research has been publishing on since 2012. The model uses machine learning to aggregate over 110 alphas and invest in thousands of stocks across the globe.
 
