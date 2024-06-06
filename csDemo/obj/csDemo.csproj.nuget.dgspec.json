@@ -43,6 +43,10 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "SharpLearning.AdaBoost": {
+              "target": "Package",
+              "version": "[0.31.8, )"
+            },
             "SharpLearning.DecisionTrees": {
               "target": "Package",
               "version": "[0.31.8, )"

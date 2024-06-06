@@ -2,6 +2,26 @@
   "version": 3,
   "targets": {
     "net8.0": {
+      "SharpLearning.AdaBoost/0.31.8": {
+        "type": "package",
+        "dependencies": {
+          "SharpLearning.Common.Interfaces": "0.31.8",
+          "SharpLearning.Containers": "0.31.8",
+          "SharpLearning.DecisionTrees": "0.31.8",
+          "SharpLearning.InputOutput": "0.31.8",
+          "SharpLearning.Metrics": "0.31.8"
+        },
+        "compile": {
+          "lib/netstandard2.0/SharpLearning.AdaBoost.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/SharpLearning.AdaBoost.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "SharpLearning.Common.Interfaces/0.31.8": {
         "type": "package",
         "dependencies": {
@@ -104,6 +124,21 @@
     }
   },
   "libraries": {
+    "SharpLearning.AdaBoost/0.31.8": {
+      "sha512": "RARhUCEthtk/FjdgzxoaOyb5K7Nhpj5jBt/sN71HMx1sdY9XvvLwORanMi/CRYK+7MQ0j6neQNwMNSg/CjOswg==",
+      "type": "package",
+      "path": "sharplearning.adaboost/0.31.8",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net461/SharpLearning.AdaBoost.dll",
+        "lib/net461/SharpLearning.AdaBoost.xml",
+        "lib/netstandard2.0/SharpLearning.AdaBoost.dll",
+        "lib/netstandard2.0/SharpLearning.AdaBoost.xml",
+        "sharplearning.adaboost.0.31.8.nupkg.sha512",
+        "sharplearning.adaboost.nuspec"
+      ]
+    },
     "SharpLearning.Common.Interfaces/0.31.8": {
       "sha512": "S5orVVe47m4VhwxO5Er9nM+8PFktIfuV8Uobwi5ug9DlK4VpB3+FmVtyxLFCh1Qxlb1y9LIW6RyPu39kSG0TVw==",
       "type": "package",
@@ -197,6 +232,7 @@
   },
   "projectFileDependencyGroups": {
     "net8.0": [
+      "SharpLearning.AdaBoost >= 0.31.8",
       "SharpLearning.DecisionTrees >= 0.31.8",
       "SharpLearning.InputOutput >= 0.31.8",
       "SharpLearning.Metrics >= 0.31.8",
@@ -245,6 +281,10 @@
       "net8.0": {
         "targetAlias": "net8.0",
         "dependencies": {
+          "SharpLearning.AdaBoost": {
+            "target": "Package",
+            "version": "[0.31.8, )"
+          },
           "SharpLearning.DecisionTrees": {
             "target": "Package",
             "version": "[0.31.8, )"
