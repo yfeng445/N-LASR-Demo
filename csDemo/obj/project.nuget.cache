@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "dgSpecHash": "6yhzbNc3RXU=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\56111\\Desktop\\NLASR-Demo\\csDemo\\csDemo.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\56111\\.nuget\\packages\\sharplearning.common.interfaces\\0.31.8\\sharplearning.common.interfaces.0.31.8.nupkg.sha512",
+    "C:\\Users\\56111\\.nuget\\packages\\sharplearning.containers\\0.31.8\\sharplearning.containers.0.31.8.nupkg.sha512",
+    "C:\\Users\\56111\\.nuget\\packages\\sharplearning.decisiontrees\\0.31.8\\sharplearning.decisiontrees.0.31.8.nupkg.sha512",
+    "C:\\Users\\56111\\.nuget\\packages\\sharplearning.inputoutput\\0.31.8\\sharplearning.inputoutput.0.31.8.nupkg.sha512",
+    "C:\\Users\\56111\\.nuget\\packages\\sharplearning.randomforest\\0.31.8\\sharplearning.randomforest.0.31.8.nupkg.sha512"
+  ],
+  "logs": []
+}

@@ -1,0 +1,248 @@
+{
+  "version": 3,
+  "targets": {
+    "net8.0": {
+      "SharpLearning.Common.Interfaces/0.31.8": {
+        "type": "package",
+        "dependencies": {
+          "SharpLearning.Containers": "0.31.8"
+        },
+        "compile": {
+          "lib/netstandard2.0/SharpLearning.Common.Interfaces.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/SharpLearning.Common.Interfaces.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "SharpLearning.Containers/0.31.8": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/SharpLearning.Containers.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/SharpLearning.Containers.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "SharpLearning.DecisionTrees/0.31.8": {
+        "type": "package",
+        "dependencies": {
+          "SharpLearning.Common.Interfaces": "0.31.8",
+          "SharpLearning.Containers": "0.31.8",
+          "SharpLearning.InputOutput": "0.31.8"
+        },
+        "compile": {
+          "lib/netstandard2.0/SharpLearning.DecisionTrees.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/SharpLearning.DecisionTrees.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "SharpLearning.InputOutput/0.31.8": {
+        "type": "package",
+        "dependencies": {
+          "SharpLearning.Containers": "0.31.8"
+        },
+        "compile": {
+          "lib/netstandard2.0/SharpLearning.InputOutput.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/SharpLearning.InputOutput.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "SharpLearning.RandomForest/0.31.8": {
+        "type": "package",
+        "dependencies": {
+          "SharpLearning.Common.Interfaces": "0.31.8",
+          "SharpLearning.Containers": "0.31.8",
+          "SharpLearning.DecisionTrees": "0.31.8",
+          "SharpLearning.InputOutput": "0.31.8"
+        },
+        "compile": {
+          "lib/netstandard2.0/SharpLearning.RandomForest.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/SharpLearning.RandomForest.dll": {
+            "related": ".xml"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "SharpLearning.Common.Interfaces/0.31.8": {
+      "sha512": "S5orVVe47m4VhwxO5Er9nM+8PFktIfuV8Uobwi5ug9DlK4VpB3+FmVtyxLFCh1Qxlb1y9LIW6RyPu39kSG0TVw==",
+      "type": "package",
+      "path": "sharplearning.common.interfaces/0.31.8",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net461/SharpLearning.Common.Interfaces.dll",
+        "lib/net461/SharpLearning.Common.Interfaces.xml",
+        "lib/netstandard2.0/SharpLearning.Common.Interfaces.dll",
+        "lib/netstandard2.0/SharpLearning.Common.Interfaces.xml",
+        "sharplearning.common.interfaces.0.31.8.nupkg.sha512",
+        "sharplearning.common.interfaces.nuspec"
+      ]
+    },
+    "SharpLearning.Containers/0.31.8": {
+      "sha512": "eHqhtxxYEfIRDJ7PKLW3UFxTcYUZaLVGMdFRrZVD5oFaFF0G1Kz0RlPOdK94RNlRYMVTO7ckDEZbGRcpzmCLqw==",
+      "type": "package",
+      "path": "sharplearning.containers/0.31.8",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net461/SharpLearning.Containers.dll",
+        "lib/net461/SharpLearning.Containers.xml",
+        "lib/netstandard2.0/SharpLearning.Containers.dll",
+        "lib/netstandard2.0/SharpLearning.Containers.xml",
+        "sharplearning.containers.0.31.8.nupkg.sha512",
+        "sharplearning.containers.nuspec"
+      ]
+    },
+    "SharpLearning.DecisionTrees/0.31.8": {
+      "sha512": "AKnfzj7N8wxavxrcUYNQrSGUYJggvX5RkeB4/0zc88NSZj8eL9MiH36R0e5TgdKgsltlAhWcvx0mtECxxtfa+Q==",
+      "type": "package",
+      "path": "sharplearning.decisiontrees/0.31.8",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net461/SharpLearning.DecisionTrees.dll",
+        "lib/net461/SharpLearning.DecisionTrees.xml",
+        "lib/netstandard2.0/SharpLearning.DecisionTrees.dll",
+        "lib/netstandard2.0/SharpLearning.DecisionTrees.xml",
+        "sharplearning.decisiontrees.0.31.8.nupkg.sha512",
+        "sharplearning.decisiontrees.nuspec"
+      ]
+    },
+    "SharpLearning.InputOutput/0.31.8": {
+      "sha512": "sBXC3u5tkyTvIR9X3eds6nUwBxp7jhzvEh/8v3yjSFtwE5OWdNDWrKvUWGTGkopdU/Z2TGPPgN1XBKHp1P3ojA==",
+      "type": "package",
+      "path": "sharplearning.inputoutput/0.31.8",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net461/SharpLearning.InputOutput.dll",
+        "lib/net461/SharpLearning.InputOutput.xml",
+        "lib/netstandard2.0/SharpLearning.InputOutput.dll",
+        "lib/netstandard2.0/SharpLearning.InputOutput.xml",
+        "sharplearning.inputoutput.0.31.8.nupkg.sha512",
+        "sharplearning.inputoutput.nuspec"
+      ]
+    },
+    "SharpLearning.RandomForest/0.31.8": {
+      "sha512": "7SHz0FUxTGeaIx58IBrThSfGKW3xh8OV37FZ27HqTz+NF7gjYhsdMfUtp7YTtnsLujMgKA2UrqL9x33NNWJeZQ==",
+      "type": "package",
+      "path": "sharplearning.randomforest/0.31.8",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net461/SharpLearning.RandomForest.dll",
+        "lib/net461/SharpLearning.RandomForest.xml",
+        "lib/netstandard2.0/SharpLearning.RandomForest.dll",
+        "lib/netstandard2.0/SharpLearning.RandomForest.xml",
+        "sharplearning.randomforest.0.31.8.nupkg.sha512",
+        "sharplearning.randomforest.nuspec"
+      ]
+    }
+  },
+  "projectFileDependencyGroups": {
+    "net8.0": [
+      "SharpLearning.DecisionTrees >= 0.31.8",
+      "SharpLearning.InputOutput >= 0.31.8",
+      "SharpLearning.RandomForest >= 0.31.8"
+    ]
+  },
+  "packageFolders": {
+    "C:\\Users\\56111\\.nuget\\packages\\": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "C:\\Users\\56111\\Desktop\\NLASR-Demo\\csDemo\\csDemo.csproj",
+      "projectName": "csDemo",
+      "projectPath": "C:\\Users\\56111\\Desktop\\NLASR-Demo\\csDemo\\csDemo.csproj",
+      "packagesPath": "C:\\Users\\56111\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\56111\\Desktop\\NLASR-Demo\\csDemo\\obj\\",
+      "projectStyle": "PackageReference",
+      "configFilePaths": [
+        "C:\\Users\\56111\\AppData\\Roaming\\NuGet\\NuGet.Config"
+      ],
+      "originalTargetFrameworks": [
+        "net8.0"
+      ],
+      "sources": {
+        "https://api.nuget.org/v3/index.json": {}
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "projectReferences": {}
+        }
+      },
+      "warningProperties": {
+        "warnAsError": [
+          "NU1605"
+        ]
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
+      }
+    },
+    "frameworks": {
+      "net8.0": {
+        "targetAlias": "net8.0",
+        "dependencies": {
+          "SharpLearning.DecisionTrees": {
+            "target": "Package",
+            "version": "[0.31.8, )"
+          },
+          "SharpLearning.InputOutput": {
+            "target": "Package",
+            "version": "[0.31.8, )"
+          },
+          "SharpLearning.RandomForest": {
+            "target": "Package",
+            "version": "[0.31.8, )"
+          }
+        },
+        "imports": [
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48",
+          "net481"
+        ],
+        "assetTargetFallback": true,
+        "warn": true,
+        "frameworkReferences": {
+          "Microsoft.NETCore.App": {
+            "privateAssets": "all"
+          }
+        },
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.301/PortableRuntimeIdentifierGraph.json"
+      }
+    }
+  }
+}
