@@ -51,6 +51,10 @@
               "target": "Package",
               "version": "[0.31.8, )"
             },
+            "SharpLearning.Metrics": {
+              "target": "Package",
+              "version": "[0.31.8, )"
+            },
             "SharpLearning.RandomForest": {
               "target": "Package",
               "version": "[0.31.8, )"
