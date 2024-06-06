@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Microsoft.VisualBasic.FileIO;
 using SharpLearning.AdaBoost.Learners;
 using SharpLearning.DecisionTrees.Learners;
 using SharpLearning.Metrics.Classification;
@@ -13,11 +14,35 @@ class Program
 {
     static void Main()
     {
+        // Preprocess the CSV file to ensure correct formatting
+        string inputFilePath = @"./BostonHousing.csv";
+        string outputFilePath = @"./PreprocessedBostonHousing.csv";
+        PreprocessCsv(inputFilePath, outputFilePath);
+
+        // Load the preprocessed dataset and print column names
+        var parser = new CsvParser(() => new StreamReader(outputFilePath));
+        var header = parser.EnumerateRows().First().ColumnNameToIndex.Keys;
+        Console.WriteLine("Column Names in CSV:");
+        foreach (var column in header)
+        {
+            Console.WriteLine(column);
+        }
+
+        // Check if the column count is correct
+        if (header.Count() <= 1)
+        {
+            Console.WriteLine("The CSV file does not contain the correct number of columns.TTTTTTTTTTTTTTTTT");
+            return;
+        }
+        else{
+            Console.WriteLine("There are", header.Count(), "columns in total");
+        }
+
         // Load the dataset
-        var parser = new CsvParser(() => new StreamReader(@"path/to/your/BostonHousing.csv"));
         var observations = parser.EnumerateRows("medv").ToF64Matrix();
         var targets = parser.EnumerateRows("medv").ToF64Vector();
 
+        // Rest of your code...
         // Create a binary target variable
         double medianValue = Median(targets);
         for (int i = 0; i < targets.Length; i++)
@@ -52,6 +77,31 @@ class Program
         // Calculate the confusion matrix
         var confusionMatrix = CalculateConfusionMatrix(testingTargets, predictions);
         PrintConfusionMatrix(confusionMatrix);
+    }
+
+    static void PreprocessCsv(string inputFilePath, string outputFilePath)
+    {
+        using (var reader = new StreamReader(inputFilePath))
+        using (var writer = new StreamWriter(outputFilePath))
+        {
+            // Use TextFieldParser to handle CSV reading properly
+            using (var parser = new TextFieldParser(reader))
+            {
+                parser.TextFieldType = FieldType.Delimited;
+                parser.SetDelimiters(",");
+
+                // Read header
+                string[] headerFields = parser.ReadFields();
+                writer.WriteLine(string.Join(",", headerFields));
+
+                // Read and write the rest of the file
+                while (!parser.EndOfData)
+                {
+                    string[] fields = parser.ReadFields();
+                    writer.WriteLine(string.Join(",", fields));
+                }
+            }
+        }
     }
 
     static (F64Matrix TrainingObservations, double[] TrainingTargets, F64Matrix TestingObservations, double[] TestingTargets) SplitData(F64Matrix observations, double[] targets, double trainRatio)

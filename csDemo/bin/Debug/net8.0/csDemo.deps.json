@@ -1,0 +1,163 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "csDemo/1.0.0": {
+        "dependencies": {
+          "SharpLearning.AdaBoost": "0.31.8",
+          "SharpLearning.DecisionTrees": "0.31.8",
+          "SharpLearning.InputOutput": "0.31.8",
+          "SharpLearning.Metrics": "0.31.8",
+          "SharpLearning.RandomForest": "0.31.8"
+        },
+        "runtime": {
+          "csDemo.dll": {}
+        }
+      },
+      "SharpLearning.AdaBoost/0.31.8": {
+        "dependencies": {
+          "SharpLearning.Common.Interfaces": "0.31.8",
+          "SharpLearning.Containers": "0.31.8",
+          "SharpLearning.DecisionTrees": "0.31.8",
+          "SharpLearning.InputOutput": "0.31.8",
+          "SharpLearning.Metrics": "0.31.8"
+        },
+        "runtime": {
+          "lib/netstandard2.0/SharpLearning.AdaBoost.dll": {
+            "assemblyVersion": "0.31.8.0",
+            "fileVersion": "0.31.8.0"
+          }
+        }
+      },
+      "SharpLearning.Common.Interfaces/0.31.8": {
+        "dependencies": {
+          "SharpLearning.Containers": "0.31.8"
+        },
+        "runtime": {
+          "lib/netstandard2.0/SharpLearning.Common.Interfaces.dll": {
+            "assemblyVersion": "0.31.8.0",
+            "fileVersion": "0.31.8.0"
+          }
+        }
+      },
+      "SharpLearning.Containers/0.31.8": {
+        "runtime": {
+          "lib/netstandard2.0/SharpLearning.Containers.dll": {
+            "assemblyVersion": "0.31.8.0",
+            "fileVersion": "0.31.8.0"
+          }
+        }
+      },
+      "SharpLearning.DecisionTrees/0.31.8": {
+        "dependencies": {
+          "SharpLearning.Common.Interfaces": "0.31.8",
+          "SharpLearning.Containers": "0.31.8",
+          "SharpLearning.InputOutput": "0.31.8"
+        },
+        "runtime": {
+          "lib/netstandard2.0/SharpLearning.DecisionTrees.dll": {
+            "assemblyVersion": "0.31.8.0",
+            "fileVersion": "0.31.8.0"
+          }
+        }
+      },
+      "SharpLearning.InputOutput/0.31.8": {
+        "dependencies": {
+          "SharpLearning.Containers": "0.31.8"
+        },
+        "runtime": {
+          "lib/netstandard2.0/SharpLearning.InputOutput.dll": {
+            "assemblyVersion": "0.31.8.0",
+            "fileVersion": "0.31.8.0"
+          }
+        }
+      },
+      "SharpLearning.Metrics/0.31.8": {
+        "dependencies": {
+          "SharpLearning.Common.Interfaces": "0.31.8",
+          "SharpLearning.Containers": "0.31.8"
+        },
+        "runtime": {
+          "lib/netstandard2.0/SharpLearning.Metrics.dll": {
+            "assemblyVersion": "0.31.8.0",
+            "fileVersion": "0.31.8.0"
+          }
+        }
+      },
+      "SharpLearning.RandomForest/0.31.8": {
+        "dependencies": {
+          "SharpLearning.Common.Interfaces": "0.31.8",
+          "SharpLearning.Containers": "0.31.8",
+          "SharpLearning.DecisionTrees": "0.31.8",
+          "SharpLearning.InputOutput": "0.31.8"
+        },
+        "runtime": {
+          "lib/netstandard2.0/SharpLearning.RandomForest.dll": {
+            "assemblyVersion": "0.31.8.0",
+            "fileVersion": "0.31.8.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "csDemo/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "SharpLearning.AdaBoost/0.31.8": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-RARhUCEthtk/FjdgzxoaOyb5K7Nhpj5jBt/sN71HMx1sdY9XvvLwORanMi/CRYK+7MQ0j6neQNwMNSg/CjOswg==",
+      "path": "sharplearning.adaboost/0.31.8",
+      "hashPath": "sharplearning.adaboost.0.31.8.nupkg.sha512"
+    },
+    "SharpLearning.Common.Interfaces/0.31.8": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-S5orVVe47m4VhwxO5Er9nM+8PFktIfuV8Uobwi5ug9DlK4VpB3+FmVtyxLFCh1Qxlb1y9LIW6RyPu39kSG0TVw==",
+      "path": "sharplearning.common.interfaces/0.31.8",
+      "hashPath": "sharplearning.common.interfaces.0.31.8.nupkg.sha512"
+    },
+    "SharpLearning.Containers/0.31.8": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-eHqhtxxYEfIRDJ7PKLW3UFxTcYUZaLVGMdFRrZVD5oFaFF0G1Kz0RlPOdK94RNlRYMVTO7ckDEZbGRcpzmCLqw==",
+      "path": "sharplearning.containers/0.31.8",
+      "hashPath": "sharplearning.containers.0.31.8.nupkg.sha512"
+    },
+    "SharpLearning.DecisionTrees/0.31.8": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-AKnfzj7N8wxavxrcUYNQrSGUYJggvX5RkeB4/0zc88NSZj8eL9MiH36R0e5TgdKgsltlAhWcvx0mtECxxtfa+Q==",
+      "path": "sharplearning.decisiontrees/0.31.8",
+      "hashPath": "sharplearning.decisiontrees.0.31.8.nupkg.sha512"
+    },
+    "SharpLearning.InputOutput/0.31.8": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-sBXC3u5tkyTvIR9X3eds6nUwBxp7jhzvEh/8v3yjSFtwE5OWdNDWrKvUWGTGkopdU/Z2TGPPgN1XBKHp1P3ojA==",
+      "path": "sharplearning.inputoutput/0.31.8",
+      "hashPath": "sharplearning.inputoutput.0.31.8.nupkg.sha512"
+    },
+    "SharpLearning.Metrics/0.31.8": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-jf6o0qpM4bT9bx1OZAOZnEg7yskW+qCWsQ4Hh/yZv+Yp36Vl6GPuyJ8ezO73k+n+gzV16XCP5GLUPUmwHb0BMw==",
+      "path": "sharplearning.metrics/0.31.8",
+      "hashPath": "sharplearning.metrics.0.31.8.nupkg.sha512"
+    },
+    "SharpLearning.RandomForest/0.31.8": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-7SHz0FUxTGeaIx58IBrThSfGKW3xh8OV37FZ27HqTz+NF7gjYhsdMfUtp7YTtnsLujMgKA2UrqL9x33NNWJeZQ==",
+      "path": "sharplearning.randomforest/0.31.8",
+      "hashPath": "sharplearning.randomforest.0.31.8.nupkg.sha512"
+    }
+  }
+}
