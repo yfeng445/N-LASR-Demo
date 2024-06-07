@@ -22,3 +22,4 @@ C:\Users\56111\Desktop\NLASR-Demo\csDemo\obj\Debug\net8.0\refint\csDemo.dll
 C:\Users\56111\Desktop\NLASR-Demo\csDemo\obj\Debug\net8.0\csDemo.pdb
 C:\Users\56111\Desktop\NLASR-Demo\csDemo\obj\Debug\net8.0\csDemo.genruntimeconfig.cache
 C:\Users\56111\Desktop\NLASR-Demo\csDemo\obj\Debug\net8.0\ref\csDemo.dll
+C:\Users\56111\Desktop\NLASR-Demo\csDemo\bin\Debug\net8.0\SharpLearning.CrossValidation.dll

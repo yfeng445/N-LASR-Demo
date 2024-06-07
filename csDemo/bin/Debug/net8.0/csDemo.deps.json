@@ -9,6 +9,7 @@
       "csDemo/1.0.0": {
         "dependencies": {
           "SharpLearning.AdaBoost": "0.31.8",
+          "SharpLearning.CrossValidation": "0.31.8",
           "SharpLearning.DecisionTrees": "0.31.8",
           "SharpLearning.InputOutput": "0.31.8",
           "SharpLearning.Metrics": "0.31.8",
@@ -47,6 +48,20 @@
       "SharpLearning.Containers/0.31.8": {
         "runtime": {
           "lib/netstandard2.0/SharpLearning.Containers.dll": {
+            "assemblyVersion": "0.31.8.0",
+            "fileVersion": "0.31.8.0"
+          }
+        }
+      },
+      "SharpLearning.CrossValidation/0.31.8": {
+        "dependencies": {
+          "SharpLearning.Common.Interfaces": "0.31.8",
+          "SharpLearning.Containers": "0.31.8",
+          "SharpLearning.InputOutput": "0.31.8",
+          "System.ValueTuple": "4.5.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/SharpLearning.CrossValidation.dll": {
             "assemblyVersion": "0.31.8.0",
             "fileVersion": "0.31.8.0"
           }
@@ -101,7 +116,8 @@
             "fileVersion": "0.31.8.0"
           }
         }
-      }
+      },
+      "System.ValueTuple/4.5.0": {}
     }
   },
   "libraries": {
@@ -131,6 +147,13 @@
       "path": "sharplearning.containers/0.31.8",
       "hashPath": "sharplearning.containers.0.31.8.nupkg.sha512"
     },
+    "SharpLearning.CrossValidation/0.31.8": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-mO9b6wm6eg33qh5tcyxy3Oio+u7dpnYWdbY3ePHV94zji+QBtOrA30KAFP/B5x6xI9AvUmkQHEJ2mDLZ3Fj00w==",
+      "path": "sharplearning.crossvalidation/0.31.8",
+      "hashPath": "sharplearning.crossvalidation.0.31.8.nupkg.sha512"
+    },
     "SharpLearning.DecisionTrees/0.31.8": {
       "type": "package",
       "serviceable": true,
@@ -158,6 +181,13 @@
       "sha512": "sha512-7SHz0FUxTGeaIx58IBrThSfGKW3xh8OV37FZ27HqTz+NF7gjYhsdMfUtp7YTtnsLujMgKA2UrqL9x33NNWJeZQ==",
       "path": "sharplearning.randomforest/0.31.8",
       "hashPath": "sharplearning.randomforest.0.31.8.nupkg.sha512"
+    },
+    "System.ValueTuple/4.5.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-okurQJO6NRE/apDIP23ajJ0hpiNmJ+f0BwOlB/cSqTLQlw5upkf+5+96+iG2Jw40G1fCVCyPz/FhIABUjMR+RQ==",
+      "path": "system.valuetuple/4.5.0",
+      "hashPath": "system.valuetuple.4.5.0.nupkg.sha512"
     }
   }
 }

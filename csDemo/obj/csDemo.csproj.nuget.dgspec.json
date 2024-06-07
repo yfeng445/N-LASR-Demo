@@ -47,6 +47,10 @@
               "target": "Package",
               "version": "[0.31.8, )"
             },
+            "SharpLearning.CrossValidation": {
+              "target": "Package",
+              "version": "[0.31.8, )"
+            },
             "SharpLearning.DecisionTrees": {
               "target": "Package",
               "version": "[0.31.8, )"

@@ -1,22 +1,30 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
+using System.Collections.Generic;
 using System.Linq;
+using Microsoft.VisualBasic.FileIO;
 using SharpLearning.AdaBoost.Learners;
 using SharpLearning.DecisionTrees.Learners;
 using SharpLearning.Metrics.Classification;
-using SharpLearning.Common.Interfaces;
 using SharpLearning.Containers.Matrices;
-using SharpLearning.InputOutput.Csv;
+using SharpLearning.CrossValidation.CrossValidators;
+using SharpLearning.Common.Interfaces;
 
 class Program
 {
     static void Main()
     {
-        // Load the dataset
-        var parser = new CsvParser(() => new StreamReader(@"path/to/your/BostonHousing.csv"));
-        var observations = parser.EnumerateRows("medv").ToF64Matrix();
-        var targets = parser.EnumerateRows("medv").ToF64Vector();
+        // Specify the path to the CSV file
+        string inputFilePath = @"./BostonHousing.csv";
+        
+        // Load the dataset and save it as a matrix
+        var (observations, targets) = LoadCsvAsMatrix(inputFilePath);
+
+        // Print some basic statistics
+        Console.WriteLine("Data Loaded:");
+        Console.WriteLine($"Number of observations: {observations.RowCount}");
+        Console.WriteLine($"Number of features: {observations.ColumnCount}");
+        Console.WriteLine($"Number of targets: {targets.Length}");
 
         // Create a binary target variable
         double medianValue = Median(targets);
@@ -24,6 +32,13 @@ class Program
         {
             targets[i] = targets[i] > medianValue ? 1.0 : 0.0;
         }
+
+        // Perform cross-validation
+        int k = 5; // Number of folds
+        var crossValidationError = CrossValidate(observations, targets, k);
+
+        // Print cross-validation results
+        Console.WriteLine($"Cross-validation total error: {crossValidationError}");
 
         // Split the dataset into training and testing sets
         var split = SplitData(observations, targets, 0.7);
@@ -33,11 +48,12 @@ class Program
         var testingTargets = split.TestingTargets;
 
         // Initialize and train the AdaBoost model
+        var decisionTreeLearner = new ClassificationDecisionTreeLearner(maximumTreeDepth: 1);
         var adaBoostLearner = new ClassificationAdaBoostLearner(
             iterations: 50,
             learningRate: 1.0,
             maximumTreeDepth: 1
-        );
+            );
         var model = adaBoostLearner.Learn(trainingObservations, trainingTargets);
 
         // Make predictions
@@ -52,6 +68,63 @@ class Program
         // Calculate the confusion matrix
         var confusionMatrix = CalculateConfusionMatrix(testingTargets, predictions);
         PrintConfusionMatrix(confusionMatrix);
+    }
+
+    static (F64Matrix, double[]) LoadCsvAsMatrix(string inputFilePath)
+    {
+        try
+        {
+            using (var reader = new StreamReader(inputFilePath))
+            {
+                using (var parser = new TextFieldParser(reader))
+                {
+                    parser.TextFieldType = FieldType.Delimited;
+                    parser.SetDelimiters(",");
+
+                    // Read header
+                    string[] headerFields = parser.ReadFields();
+                    int numColumns = headerFields.Length;
+
+                    // Prepare lists to hold the data
+                    var observationsList = new List<double[]>();
+                    var targetsList = new List<double>();
+
+                    // Read the data
+                    while (!parser.EndOfData)
+                    {
+                        string[] fields = parser.ReadFields();
+                        double[] observation = new double[numColumns - 1];
+
+                        for (int i = 0; i < numColumns - 1; i++)
+                        {
+                            observation[i] = double.Parse(fields[i]);
+                        }
+
+                        observationsList.Add(observation);
+                        targetsList.Add(double.Parse(fields[numColumns - 1]));
+                    }
+
+                    // Convert lists to matrix and array
+                    var observations = new F64Matrix(observationsList.Count, numColumns - 1);
+                    for (int i = 0; i < observationsList.Count; i++)
+                    {
+                        for (int j = 0; j < numColumns - 1; j++)
+                        {
+                            observations[i, j] = observationsList[i][j];
+                        }
+                    }
+
+                    var targets = targetsList.ToArray();
+
+                    return (observations, targets);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"An error occurred: {ex.Message}");
+            return (null, null);
+        }
     }
 
     static (F64Matrix TrainingObservations, double[] TrainingTargets, F64Matrix TestingObservations, double[] TestingTargets) SplitData(F64Matrix observations, double[] targets, double trainRatio)
@@ -99,6 +172,25 @@ class Program
         }
         return values[n / 2];
     }
+
+static double CrossValidate(F64Matrix observations, double[] targets, int k)
+{
+    var crossValidator = new RandomCrossValidation<double>(k, 42);
+    var learner = new ClassificationAdaBoostLearner(
+        iterations: 50,
+        learningRate: 1.0,
+        maximumTreeDepth: 1
+    );
+
+    var crossValidationResult = crossValidator.CrossValidate(learner, observations, targets);
+
+    var metric = new TotalErrorClassificationMetric<double>();
+    var error = metric.Error(crossValidationResult.Targets.ToArray(), crossValidationResult.Predictions.ToArray());
+
+    return error;
+}
+
+
 
     static Dictionary<(double, double), int> CalculateConfusionMatrix(double[] actual, double[] predicted)
     {

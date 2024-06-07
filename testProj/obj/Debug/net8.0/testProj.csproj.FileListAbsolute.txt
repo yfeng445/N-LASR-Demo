@@ -21,3 +21,4 @@ C:\Users\56111\Desktop\NLASR-Demo\testProj\bin\Debug\net8.0\SharpLearning.Common
 C:\Users\56111\Desktop\NLASR-Demo\testProj\bin\Debug\net8.0\SharpLearning.DecisionTrees.dll
 C:\Users\56111\Desktop\NLASR-Demo\testProj\bin\Debug\net8.0\SharpLearning.InputOutput.dll
 C:\Users\56111\Desktop\NLASR-Demo\testProj\bin\Debug\net8.0\SharpLearning.Metrics.dll
+C:\Users\56111\Desktop\NLASR-Demo\testProj\bin\Debug\net8.0\SharpLearning.CrossValidation.dll
