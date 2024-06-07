@@ -46,6 +46,10 @@
             "Microsoft.VisualBasic": {
               "target": "Package",
               "version": "[10.3.0, )"
+            },
+            "SharpLearning.Containers": {
+              "target": "Package",
+              "version": "[0.31.8, )"
             }
           },
           "imports": [

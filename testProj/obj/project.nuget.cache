@@ -1,10 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "IWJuXnPLTlk=",
+  "dgSpecHash": "fKj3X3pdzMk=",
   "success": true,
   "projectFilePath": "C:\\Users\\56111\\Desktop\\NLASR-Demo\\testProj\\testProj.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\56111\\.nuget\\packages\\microsoft.visualbasic\\10.3.0\\microsoft.visualbasic.10.3.0.nupkg.sha512"
+    "C:\\Users\\56111\\.nuget\\packages\\microsoft.visualbasic\\10.3.0\\microsoft.visualbasic.10.3.0.nupkg.sha512",
+    "C:\\Users\\56111\\.nuget\\packages\\sharplearning.containers\\0.31.8\\sharplearning.containers.0.31.8.nupkg.sha512"
   ],
   "logs": []
 }

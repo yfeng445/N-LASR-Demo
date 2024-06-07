@@ -10,6 +10,19 @@
         "runtime": {
           "lib/netcoreapp2.0/_._": {}
         }
+      },
+      "SharpLearning.Containers/0.31.8": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/SharpLearning.Containers.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/SharpLearning.Containers.dll": {
+            "related": ".xml"
+          }
+        }
       }
     }
   },
@@ -67,11 +80,27 @@
         "useSharedDesignerContext.txt",
         "version.txt"
       ]
+    },
+    "SharpLearning.Containers/0.31.8": {
+      "sha512": "eHqhtxxYEfIRDJ7PKLW3UFxTcYUZaLVGMdFRrZVD5oFaFF0G1Kz0RlPOdK94RNlRYMVTO7ckDEZbGRcpzmCLqw==",
+      "type": "package",
+      "path": "sharplearning.containers/0.31.8",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net461/SharpLearning.Containers.dll",
+        "lib/net461/SharpLearning.Containers.xml",
+        "lib/netstandard2.0/SharpLearning.Containers.dll",
+        "lib/netstandard2.0/SharpLearning.Containers.xml",
+        "sharplearning.containers.0.31.8.nupkg.sha512",
+        "sharplearning.containers.nuspec"
+      ]
     }
   },
   "projectFileDependencyGroups": {
     "net8.0": [
-      "Microsoft.VisualBasic >= 10.3.0"
+      "Microsoft.VisualBasic >= 10.3.0",
+      "SharpLearning.Containers >= 0.31.8"
     ]
   },
   "packageFolders": {
@@ -119,6 +148,10 @@
           "Microsoft.VisualBasic": {
             "target": "Package",
             "version": "[10.3.0, )"
+          },
+          "SharpLearning.Containers": {
+            "target": "Package",
+            "version": "[0.31.8, )"
           }
         },
         "imports": [
