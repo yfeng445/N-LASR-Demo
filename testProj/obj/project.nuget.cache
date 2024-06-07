@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "IWJuXnPLTlk=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\56111\\Desktop\\NLASR-Demo\\testProj\\testProj.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\56111\\.nuget\\packages\\microsoft.visualbasic\\10.3.0\\microsoft.visualbasic.10.3.0.nupkg.sha512"
+  ],
+  "logs": []
+}
