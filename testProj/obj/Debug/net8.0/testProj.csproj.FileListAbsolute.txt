@@ -13,3 +13,11 @@ C:\Users\56111\Desktop\NLASR-Demo\testProj\obj\Debug\net8.0\refint\testProj.dll
 C:\Users\56111\Desktop\NLASR-Demo\testProj\obj\Debug\net8.0\testProj.pdb
 C:\Users\56111\Desktop\NLASR-Demo\testProj\obj\Debug\net8.0\testProj.genruntimeconfig.cache
 C:\Users\56111\Desktop\NLASR-Demo\testProj\obj\Debug\net8.0\ref\testProj.dll
+C:\Users\56111\Desktop\NLASR-Demo\testProj\bin\Debug\net8.0\SharpLearning.Containers.dll
+C:\Users\56111\Desktop\NLASR-Demo\testProj\obj\Debug\net8.0\testProj.csproj.AssemblyReference.cache
+C:\Users\56111\Desktop\NLASR-Demo\testProj\obj\Debug\net8.0\testProj.csproj.Up2Date
+C:\Users\56111\Desktop\NLASR-Demo\testProj\bin\Debug\net8.0\SharpLearning.AdaBoost.dll
+C:\Users\56111\Desktop\NLASR-Demo\testProj\bin\Debug\net8.0\SharpLearning.Common.Interfaces.dll
+C:\Users\56111\Desktop\NLASR-Demo\testProj\bin\Debug\net8.0\SharpLearning.DecisionTrees.dll
+C:\Users\56111\Desktop\NLASR-Demo\testProj\bin\Debug\net8.0\SharpLearning.InputOutput.dll
+C:\Users\56111\Desktop\NLASR-Demo\testProj\bin\Debug\net8.0\SharpLearning.Metrics.dll

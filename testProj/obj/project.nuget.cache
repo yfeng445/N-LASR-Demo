@@ -1,11 +1,18 @@
 {
   "version": 2,
-  "dgSpecHash": "fKj3X3pdzMk=",
+  "dgSpecHash": "rqfIQ/zMxEY=",
   "success": true,
   "projectFilePath": "C:\\Users\\56111\\Desktop\\NLASR-Demo\\testProj\\testProj.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\56111\\.nuget\\packages\\microsoft.visualbasic\\10.3.0\\microsoft.visualbasic.10.3.0.nupkg.sha512",
-    "C:\\Users\\56111\\.nuget\\packages\\sharplearning.containers\\0.31.8\\sharplearning.containers.0.31.8.nupkg.sha512"
+    "C:\\Users\\56111\\.nuget\\packages\\sharplearning.adaboost\\0.31.8\\sharplearning.adaboost.0.31.8.nupkg.sha512",
+    "C:\\Users\\56111\\.nuget\\packages\\sharplearning.common.interfaces\\0.31.8\\sharplearning.common.interfaces.0.31.8.nupkg.sha512",
+    "C:\\Users\\56111\\.nuget\\packages\\sharplearning.containers\\0.31.8\\sharplearning.containers.0.31.8.nupkg.sha512",
+    "C:\\Users\\56111\\.nuget\\packages\\sharplearning.crossvalidation\\0.31.8\\sharplearning.crossvalidation.0.31.8.nupkg.sha512",
+    "C:\\Users\\56111\\.nuget\\packages\\sharplearning.decisiontrees\\0.31.8\\sharplearning.decisiontrees.0.31.8.nupkg.sha512",
+    "C:\\Users\\56111\\.nuget\\packages\\sharplearning.inputoutput\\0.31.8\\sharplearning.inputoutput.0.31.8.nupkg.sha512",
+    "C:\\Users\\56111\\.nuget\\packages\\sharplearning.metrics\\0.31.8\\sharplearning.metrics.0.31.8.nupkg.sha512",
+    "C:\\Users\\56111\\.nuget\\packages\\system.valuetuple\\4.5.0\\system.valuetuple.4.5.0.nupkg.sha512"
   ],
   "logs": []
 }

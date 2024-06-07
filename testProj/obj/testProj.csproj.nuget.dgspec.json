@@ -47,7 +47,23 @@
               "target": "Package",
               "version": "[10.3.0, )"
             },
+            "SharpLearning.AdaBoost": {
+              "target": "Package",
+              "version": "[0.31.8, )"
+            },
             "SharpLearning.Containers": {
+              "target": "Package",
+              "version": "[0.31.8, )"
+            },
+            "SharpLearning.CrossValidation": {
+              "target": "Package",
+              "version": "[0.31.8, )"
+            },
+            "SharpLearning.DecisionTrees": {
+              "target": "Package",
+              "version": "[0.31.8, )"
+            },
+            "SharpLearning.Metrics": {
               "target": "Package",
               "version": "[0.31.8, )"
             }
