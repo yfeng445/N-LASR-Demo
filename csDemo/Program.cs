@@ -8,7 +8,6 @@ using SharpLearning.DecisionTrees.Learners;
 using SharpLearning.Metrics.Classification;
 using SharpLearning.Containers.Matrices;
 using SharpLearning.CrossValidation.CrossValidators;
-using SharpLearning.Common.Interfaces;
 
 class Program
 {
@@ -16,7 +15,7 @@ class Program
     {
         // Specify the path to the CSV file
         string inputFilePath = @"./BostonHousing.csv";
-        
+
         // Load the dataset and save it as a matrix
         var (observations, targets) = LoadCsvAsMatrix(inputFilePath);
 
@@ -173,23 +172,54 @@ class Program
         return values[n / 2];
     }
 
-static double CrossValidate(F64Matrix observations, double[] targets, int k)
-{
-    var crossValidator = new RandomCrossValidation<double>(k, 42);
-    var learner = new ClassificationAdaBoostLearner(
-        iterations: 50,
-        learningRate: 1.0,
-        maximumTreeDepth: 1
-    );
+    static F64Matrix CreateMatrix(F64Matrix original, int[] indices)
+    {
+        var result = new F64Matrix(indices.Length, original.ColumnCount);
+        for (int i = 0; i < indices.Length; i++)
+        {
+            for (int j = 0; j < original.ColumnCount; j++)
+            {
+                result[i, j] = original[indices[i], j];
+            }
+        }
+        return result;
+    }
+    static double CrossValidate(F64Matrix observations, double[] targets, int k)
+    {
+        var metric = new TotalErrorClassificationMetric<double>();
+        var errors = new List<double>();
+        var random = new Random(42);
 
-    var crossValidationResult = crossValidator.CrossValidate(learner, observations, targets);
+        // Generate indices for k-fold cross-validation
+        var indices = Enumerable.Range(0, observations.RowCount).OrderBy(x => random.Next()).ToArray();
+        var foldSize = observations.RowCount / k;
 
-    var metric = new TotalErrorClassificationMetric<double>();
-    var error = metric.Error(crossValidationResult.Targets.ToArray(), crossValidationResult.Predictions.ToArray());
+        for (int i = 0; i < k; i++)
+        {
+            var testIndices = indices.Skip(i * foldSize).Take(foldSize).ToArray();
+            var trainIndices = indices.Except(testIndices).ToArray();
 
-    return error;
-}
+            var trainObservations = CreateMatrix(observations, trainIndices);
+            var trainTargets = trainIndices.Select(index => targets[index]).ToArray();
+            var testObservations = CreateMatrix(observations, testIndices);
+            var testTargets = testIndices.Select(index => targets[index]).ToArray();
 
+            var decisionTreeLearner = new ClassificationDecisionTreeLearner(maximumTreeDepth: 1);
+            var adaBoostLearner = new ClassificationAdaBoostLearner(
+                iterations: 50,
+                learningRate: 1.0,
+                maximumTreeDepth: 1
+            );
+
+            var model = adaBoostLearner.Learn(trainObservations, trainTargets);
+            var predictions = model.Predict(testObservations);
+
+            var error = metric.Error(testTargets, predictions);
+            errors.Add(error);
+        }
+
+        return errors.Average();
+    }
 
 
     static Dictionary<(double, double), int> CalculateConfusionMatrix(double[] actual, double[] predicted)
