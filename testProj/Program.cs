@@ -43,7 +43,7 @@ class Program
         // Perform cross-validation
         int k = 5; // Number of folds
         var crossValidationError = CrossValidate(observations, targets, k);
-        /*
+        
                 // Print cross-validation results
                 Console.WriteLine($"Cross-validation total error: {crossValidationError}");
 
@@ -84,7 +84,7 @@ class Program
                 // Print final elapsed time
                 Console.WriteLine($"Total Elapsed Time: {stopwatch.Elapsed}");
                 // Your existing code ends here
-                */
+                
     }
 
     private static void PrintMatrix(F64Matrix matrix, int step)
@@ -273,13 +273,13 @@ private static void PrintArray(double[] array, int step)
             Console.WriteLine($"Fold {i + 1}/{k}:");
             Console.WriteLine($"Training set size: {trainIndices.Length}");
             Console.WriteLine($"Testing set size: {testIndices.Length}");
-            /*
+        
                     if (!trainIndices.Any() || !testIndices.Any())
                     {
                         Console.WriteLine("Empty training or testing set. Skipping this fold.");
                         continue; // Skip if no elements in train or test indices
                     }
-            */
+            
             var trainObservations = CreateMatrix(observations, trainIndices);
             var trainTargets = trainIndices.Select(index => targets[index]).ToArray();
             var testObservations = CreateMatrix(observations, testIndices);
