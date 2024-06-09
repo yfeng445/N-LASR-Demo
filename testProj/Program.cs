@@ -25,66 +25,54 @@ class Program
         Thread elapsedTimeThread = new Thread(() => ShowElapsedTime(stopwatch));
         elapsedTimeThread.Start();
 
-        // Your existing code starts here
-        // Specify the path to the CSV file
-        string inputFilePath = @"./train_20230201.csv";
+        // Specify the paths to the CSV files
+        string trainFilePath = @"./train_20230201.csv";
+        string predictFilePath = @"./predict_20230201.csv";
 
-        // Load the dataset and save it as a matrix
-        var (observations, targets) = LoadCsvAsMatrix(inputFilePath);
+        // Load the training dataset
+        var (observations, targets) = LoadCsvAsMatrix(trainFilePath);
 
         // Print some basic statistics
-        Console.WriteLine("Data Loaded:");
+        Console.WriteLine("Training Data Loaded:");
         Console.WriteLine($"Number of observations: {observations.RowCount}");
         Console.WriteLine($"Number of features: {observations.ColumnCount}");
         Console.WriteLine($"Number of targets: {targets.Length}");
 
+        bool useCrossValidation = false; // Switch to enable or disable cross-validation
 
+        if (useCrossValidation)
+        {
+            // Perform cross-validation
+            int k = 5; // Number of folds
+            var crossValidationError = CrossValidate(observations, targets, k);
 
-        // Perform cross-validation
-        int k = 5; // Number of folds
-        var crossValidationError = CrossValidate(observations, targets, k);
-        
-                // Print cross-validation results
-                Console.WriteLine($"Cross-validation total error: {crossValidationError}");
+            // Print cross-validation results
+            Console.WriteLine($"\nCross-validation total error: {crossValidationError}");
+        }
 
-                // Split the dataset into training and testing sets
-                var split = SplitData(observations, targets, 0.7);
-                var trainingObservations = split.TrainingObservations;
-                var trainingTargets = split.TrainingTargets;
-                var testingObservations = split.TestingObservations;
-                var testingTargets = split.TestingTargets;
+        // Initialize and train the AdaBoost model
+        var decisionTreeLearner = new ClassificationDecisionTreeLearner(maximumTreeDepth: 1);
+        var adaBoostLearner = new ClassificationAdaBoostLearner(
+            iterations: 50,
+            learningRate: 1.0,
+            maximumTreeDepth: 1
+        );
+        var model = adaBoostLearner.Learn(observations, targets);
 
-                // Initialize and train the AdaBoost model
-                var decisionTreeLearner = new ClassificationDecisionTreeLearner(maximumTreeDepth: 1);
-                var adaBoostLearner = new ClassificationAdaBoostLearner(
-                    iterations: 50,
-                    learningRate: 1.0,
-                    maximumTreeDepth: 1
-                    );
-                var model = adaBoostLearner.Learn(trainingObservations, trainingTargets);
+        // Load the testing dataset
+        var (predictObservations, _) = LoadCsvAsMatrix(predictFilePath, false);
 
-                // Make predictions
-                var predictions = model.Predict(testingObservations);
+        // Make predictions on the testing dataset
+        var predictResults = model.Predict(predictObservations);
+        Console.WriteLine($"\nPredictions on predict_20230201.csv: {string.Join(", ", predictResults.Take(10))}..."); // Print first 10 predictions
 
-                // Evaluate the model
-                var metric = new TotalErrorClassificationMetric<double>();
-                var accuracy = 1.0 - metric.Error(testingTargets, predictions);
+        // Stop the stopwatch and elapsed time update thread
+        stopwatch.Stop();
+        _keepRunning = false;
+        elapsedTimeThread.Join();  // Wait for the elapsed time thread to finish
 
-                Console.WriteLine($"Accuracy: {accuracy}");
-
-                // Calculate the confusion matrix
-                var confusionMatrix = CalculateConfusionMatrix(testingTargets, predictions);
-                PrintConfusionMatrix(confusionMatrix);
-
-                // Stop the stopwatch and elapsed time update thread
-                stopwatch.Stop();
-                _keepRunning = false;
-                elapsedTimeThread.Join();  // Wait for the elapsed time thread to finish
-
-                // Print final elapsed time
-                Console.WriteLine($"Total Elapsed Time: {stopwatch.Elapsed}");
-                // Your existing code ends here
-                
+        // Print final elapsed time
+        Console.WriteLine($"Total Elapsed Time: {stopwatch.Elapsed}");
     }
 
     private static void PrintMatrix(F64Matrix matrix, int step)
@@ -96,24 +84,20 @@ class Program
         for (int i = 0; i < step; i++)
         {
             var row = matrix.Row(i);
+            Console.WriteLine(i);
             Console.WriteLine(string.Join(", ", row));
         }
     }
 
-private static void PrintArray(double[] array, int step)
-{
-    if (step > array.Length)
+    private static void PrintArray(double[] array, int step)
     {
-        step = array.Length;
+        if (step > array.Length)
+        {
+            step = array.Length;
+        }
+        Console.WriteLine("Array length: " + array.Length);
+        Console.WriteLine(string.Join(", ", array.Take(step)));
     }
-    Console.WriteLine("Array length: " + array.Length);
-    Console.WriteLine(string.Join(", ", array.Take(step)));
-
-}
-
-
-
-
 
     // Elapsed time update method
     static void ShowElapsedTime(Stopwatch stopwatch)
@@ -124,7 +108,8 @@ private static void PrintArray(double[] array, int step)
             Thread.Sleep(1000);  // Update every second
         }
     }
-    private static (F64Matrix, double[]) LoadCsvAsMatrix(string inputFilePath)
+
+    private static (F64Matrix, double[]) LoadCsvAsMatrix(string inputFilePath, bool loadTargets = true)
     {
         try
         {
@@ -147,9 +132,9 @@ private static void PrintArray(double[] array, int step)
                     while (!parser.EndOfData)
                     {
                         string[] fields = parser.ReadFields();
-                        double[] observation = new double[numColumns - 3]; // Adjusted for 'SYMOBL', 'Date' columns, and the last column
+                        double[] observation = new double[numColumns - (loadTargets ? 3 : 2)]; // Adjusted for 'SYMOBL', 'Date' columns, and the last column if loading targets
 
-                        for (int i = 2; i < numColumns - 1; i++) // Skip 'SYMOBL' and 'Date'
+                        for (int i = 2; i < numColumns - (loadTargets ? 1 : 0); i++) // Skip 'SYMOBL' and 'Date'
                         {
                             if (double.TryParse(fields[i], out double value))
                             {
@@ -163,13 +148,9 @@ private static void PrintArray(double[] array, int step)
 
                         observationsList.Add(observation);
 
-                        if (double.TryParse(fields[numColumns - 1], out double target))
+                        if (loadTargets && double.TryParse(fields[numColumns - 1], out double target))
                         {
                             targetsList.Add(target);
-                        }
-                        else
-                        {
-                            targetsList.Add(double.NaN); // Handle non-numeric target
                         }
                     }
 
@@ -179,18 +160,18 @@ private static void PrintArray(double[] array, int step)
 
                     for (int i = 0; i < observationsList.Count; i++)
                     {
-                        if (!observationsList[i].Any(double.IsNaN) && !double.IsNaN(targetsList[i]))
+                        if (!observationsList[i].Any(double.IsNaN) && (!loadTargets || !double.IsNaN(targetsList[i])))
                         {
                             cleanObservationsList.Add(observationsList[i]);
-                            cleanTargetsList.Add(targetsList[i]);
+                            if (loadTargets) cleanTargetsList.Add(targetsList[i]);
                         }
                     }
 
                     // Convert lists to matrix and array
-                    var observations = new F64Matrix(cleanObservationsList.Count, numColumns - 3);
+                    var observations = new F64Matrix(cleanObservationsList.Count, numColumns - (loadTargets ? 3 : 2));
                     for (int i = 0; i < cleanObservationsList.Count; i++)
                     {
-                        for (int j = 0; j < numColumns - 3; j++)
+                        for (int j = 0; j < numColumns - (loadTargets ? 3 : 2); j++)
                         {
                             observations[i, j] = cleanObservationsList[i][j];
                         }
@@ -207,41 +188,6 @@ private static void PrintArray(double[] array, int step)
             Console.WriteLine($"An error occurred: {ex.Message}");
             return (null, null);
         }
-    }
-
-    static (F64Matrix TrainingObservations, double[] TrainingTargets, F64Matrix TestingObservations, double[] TestingTargets) SplitData(F64Matrix observations, double[] targets, double trainRatio)
-    {
-        int totalRows = observations.RowCount;
-        int trainCount = (int)(totalRows * trainRatio);
-
-        var rand = new Random(42);
-        var indices = Enumerable.Range(0, totalRows).OrderBy(x => rand.Next()).ToArray();
-
-        var trainingObservations = new F64Matrix(trainCount, observations.ColumnCount);
-        var testingObservations = new F64Matrix(totalRows - trainCount, observations.ColumnCount);
-
-        var trainingTargets = new double[trainCount];
-        var testingTargets = new double[totalRows - trainCount];
-
-        for (int i = 0; i < trainCount; i++)
-        {
-            for (int j = 0; j < observations.ColumnCount; j++)
-            {
-                trainingObservations[i, j] = observations[indices[i], j];
-            }
-            trainingTargets[i] = targets[indices[i]];
-        }
-
-        for (int i = trainCount; i < totalRows; i++)
-        {
-            for (int j = 0; j < observations.ColumnCount; j++)
-            {
-                testingObservations[i - trainCount, j] = observations[indices[i], j];
-            }
-            testingTargets[i - trainCount] = targets[indices[i]];
-        }
-
-        return (trainingObservations, trainingTargets, testingObservations, testingTargets);
     }
 
     static double Median(double[] values)
@@ -270,16 +216,16 @@ private static void PrintArray(double[] array, int step)
             var testIndices = indices.Skip(i * foldSize).Take(foldSize).ToArray();
             var trainIndices = indices.Except(testIndices).ToArray();
 
-            Console.WriteLine($"Fold {i + 1}/{k}:");
+            Console.WriteLine($"\nFold {i + 1}/{k}:");
             Console.WriteLine($"Training set size: {trainIndices.Length}");
             Console.WriteLine($"Testing set size: {testIndices.Length}");
-        
-                    if (!trainIndices.Any() || !testIndices.Any())
-                    {
-                        Console.WriteLine("Empty training or testing set. Skipping this fold.");
-                        continue; // Skip if no elements in train or test indices
-                    }
-            
+
+            if (!trainIndices.Any() || !testIndices.Any())
+            {
+                Console.WriteLine("Empty training or testing set. Skipping this fold.");
+                continue; // Skip if no elements in train or test indices
+            }
+
             var trainObservations = CreateMatrix(observations, trainIndices);
             var trainTargets = trainIndices.Select(index => targets[index]).ToArray();
             var testObservations = CreateMatrix(observations, testIndices);
@@ -305,38 +251,17 @@ private static void PrintArray(double[] array, int step)
                 continue; // Skip if no elements in test observations or test targets
             }
 
-            // Validate test observations before predicting
-            //for (int j = 0; j < testObservations.RowCount; j++)
-            for (int j = 0; j < 5; j++)
+            try
             {
-                var observation = new double[testObservations.ColumnCount];
-                for (int col = 0; col < testObservations.ColumnCount; col++)
-                {
-                    observation[col] = testObservations[j, col];
-                }
-                PrintArray(observation, 9999);
-                
-                            if (observation.All(double.IsNaN))
-                            {
-                                Console.WriteLine($"Empty observation at index {j}. Skipping this observation.");
-                                continue; // Skip empty observations
-                            }
-                
-                try
-                {
-                    var prediction = model.Predict(observation); // Test prediction to catch potential errors
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Prediction error for observation at index {j}: {ex.Message}. Skipping this observation.");
-                    continue; // Skip observations causing errors
-                }
+                var predictions = model.Predict(testObservations);
+                var error = metric.Error(testTargets, predictions);
+                errors.Add(error);
             }
-
-            var predictions = model.Predict(testObservations);
-
-            var error = metric.Error(testTargets, predictions);
-            errors.Add(error);
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine($"Prediction error: {ex.Message}. Skipping this fold.");
+                continue; // Skip if predictions fail
+            }
         }
 
         if (!errors.Any())
@@ -346,8 +271,6 @@ private static void PrintArray(double[] array, int step)
 
         return errors.Average();
     }
-
-
 
     static F64Matrix CreateMatrix(F64Matrix original, int[] indices)
     {
@@ -381,6 +304,7 @@ private static void PrintArray(double[] array, int step)
 
         return confusionMatrix;
     }
+
     static void PrintConfusionMatrix(Dictionary<(double, double), int> confusionMatrix)
     {
         Console.WriteLine("Confusion Matrix:");
