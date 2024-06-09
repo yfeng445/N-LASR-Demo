@@ -328,24 +328,31 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\56111\\.nuget\\packages\\": {}
+    "C:\\Users\\Allen\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\56111\\Desktop\\NLASR-Demo\\csDemo\\csDemo.csproj",
+      "projectUniqueName": "C:\\Users\\Allen\\Desktop\\NLASR-Demo\\csDemo\\csDemo.csproj",
       "projectName": "csDemo",
-      "projectPath": "C:\\Users\\56111\\Desktop\\NLASR-Demo\\csDemo\\csDemo.csproj",
-      "packagesPath": "C:\\Users\\56111\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\56111\\Desktop\\NLASR-Demo\\csDemo\\obj\\",
+      "projectPath": "C:\\Users\\Allen\\Desktop\\NLASR-Demo\\csDemo\\csDemo.csproj",
+      "packagesPath": "C:\\Users\\Allen\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Allen\\Desktop\\NLASR-Demo\\csDemo\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "C:\\Users\\56111\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\Allen\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -410,7 +417,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.301/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.300/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
