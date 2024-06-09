@@ -28,7 +28,7 @@ class Program
         // Your existing code starts here
         // Specify the path to the CSV file
         string inputFilePath = @"./train_20230201.csv";
-        
+
         // Load the dataset and save it as a matrix
         var (observations, targets) = LoadCsvAsMatrix(inputFilePath);
 
@@ -38,51 +38,82 @@ class Program
         Console.WriteLine($"Number of features: {observations.ColumnCount}");
         Console.WriteLine($"Number of targets: {targets.Length}");
 
+
+
         // Perform cross-validation
         int k = 5; // Number of folds
         var crossValidationError = CrossValidate(observations, targets, k);
+        /*
+                // Print cross-validation results
+                Console.WriteLine($"Cross-validation total error: {crossValidationError}");
 
-        // Print cross-validation results
-        Console.WriteLine($"Cross-validation total error: {crossValidationError}");
+                // Split the dataset into training and testing sets
+                var split = SplitData(observations, targets, 0.7);
+                var trainingObservations = split.TrainingObservations;
+                var trainingTargets = split.TrainingTargets;
+                var testingObservations = split.TestingObservations;
+                var testingTargets = split.TestingTargets;
 
-        // Split the dataset into training and testing sets
-        var split = SplitData(observations, targets, 0.7);
-        var trainingObservations = split.TrainingObservations;
-        var trainingTargets = split.TrainingTargets;
-        var testingObservations = split.TestingObservations;
-        var testingTargets = split.TestingTargets;
+                // Initialize and train the AdaBoost model
+                var decisionTreeLearner = new ClassificationDecisionTreeLearner(maximumTreeDepth: 1);
+                var adaBoostLearner = new ClassificationAdaBoostLearner(
+                    iterations: 50,
+                    learningRate: 1.0,
+                    maximumTreeDepth: 1
+                    );
+                var model = adaBoostLearner.Learn(trainingObservations, trainingTargets);
 
-        // Initialize and train the AdaBoost model
-        var decisionTreeLearner = new ClassificationDecisionTreeLearner(maximumTreeDepth: 1);
-        var adaBoostLearner = new ClassificationAdaBoostLearner(
-            iterations: 50,
-            learningRate: 1.0,
-            maximumTreeDepth: 1
-            );
-        var model = adaBoostLearner.Learn(trainingObservations, trainingTargets);
+                // Make predictions
+                var predictions = model.Predict(testingObservations);
 
-        // Make predictions
-        var predictions = model.Predict(testingObservations);
+                // Evaluate the model
+                var metric = new TotalErrorClassificationMetric<double>();
+                var accuracy = 1.0 - metric.Error(testingTargets, predictions);
 
-        // Evaluate the model
-        var metric = new TotalErrorClassificationMetric<double>();
-        var accuracy = 1.0 - metric.Error(testingTargets, predictions);
+                Console.WriteLine($"Accuracy: {accuracy}");
 
-        Console.WriteLine($"Accuracy: {accuracy}");
+                // Calculate the confusion matrix
+                var confusionMatrix = CalculateConfusionMatrix(testingTargets, predictions);
+                PrintConfusionMatrix(confusionMatrix);
 
-        // Calculate the confusion matrix
-        var confusionMatrix = CalculateConfusionMatrix(testingTargets, predictions);
-        PrintConfusionMatrix(confusionMatrix);
+                // Stop the stopwatch and elapsed time update thread
+                stopwatch.Stop();
+                _keepRunning = false;
+                elapsedTimeThread.Join();  // Wait for the elapsed time thread to finish
 
-        // Stop the stopwatch and elapsed time update thread
-        stopwatch.Stop();
-        _keepRunning = false;
-        elapsedTimeThread.Join();  // Wait for the elapsed time thread to finish
-
-        // Print final elapsed time
-        Console.WriteLine($"Total Elapsed Time: {stopwatch.Elapsed}");
-        // Your existing code ends here
+                // Print final elapsed time
+                Console.WriteLine($"Total Elapsed Time: {stopwatch.Elapsed}");
+                // Your existing code ends here
+                */
     }
+
+    private static void PrintMatrix(F64Matrix matrix, int step)
+    {
+        if (step > matrix.RowCount)
+        {
+            step = matrix.RowCount;
+        }
+        for (int i = 0; i < step; i++)
+        {
+            var row = matrix.Row(i);
+            Console.WriteLine(string.Join(", ", row));
+        }
+    }
+
+private static void PrintArray(double[] array, int step)
+{
+    if (step > array.Length)
+    {
+        step = array.Length;
+    }
+    Console.WriteLine("Array length: " + array.Length);
+    Console.WriteLine(string.Join(", ", array.Take(step)));
+
+}
+
+
+
+
 
     // Elapsed time update method
     static void ShowElapsedTime(Stopwatch stopwatch)
@@ -93,91 +124,90 @@ class Program
             Thread.Sleep(1000);  // Update every second
         }
     }
-
-static (F64Matrix, double[]) LoadCsvAsMatrix(string inputFilePath)
-{
-    try
+    private static (F64Matrix, double[]) LoadCsvAsMatrix(string inputFilePath)
     {
-        using (var reader = new StreamReader(inputFilePath))
+        try
         {
-            using (var parser = new TextFieldParser(reader))
+            using (var reader = new StreamReader(inputFilePath))
             {
-                parser.TextFieldType = FieldType.Delimited;
-                parser.SetDelimiters(",");
-
-                // Read header
-                string[] headerFields = parser.ReadFields();
-                int numColumns = headerFields.Length;
-
-                // Prepare lists to hold the data
-                var observationsList = new List<double[]>();
-                var targetsList = new List<double>();
-
-                // Read the data
-                while (!parser.EndOfData)
+                using (var parser = new TextFieldParser(reader))
                 {
-                    string[] fields = parser.ReadFields();
-                    double[] observation = new double[numColumns - 2]; // Adjusted for 'SYMOBL' and 'Date' columns
+                    parser.TextFieldType = FieldType.Delimited;
+                    parser.SetDelimiters(",");
 
-                    for (int i = 2; i < numColumns - 1; i++) // Skip 'SYMOBL' and 'Date'
+                    // Read header
+                    string[] headerFields = parser.ReadFields();
+                    int numColumns = headerFields.Length;
+
+                    // Prepare lists to hold the data
+                    var observationsList = new List<double[]>();
+                    var targetsList = new List<double>();
+
+                    // Read the data
+                    while (!parser.EndOfData)
                     {
-                        if (double.TryParse(fields[i], out double value))
+                        string[] fields = parser.ReadFields();
+                        double[] observation = new double[numColumns - 3]; // Adjusted for 'SYMOBL', 'Date' columns, and the last column
+
+                        for (int i = 2; i < numColumns - 1; i++) // Skip 'SYMOBL' and 'Date'
                         {
-                            observation[i - 2] = value;
+                            if (double.TryParse(fields[i], out double value))
+                            {
+                                observation[i - 2] = value;
+                            }
+                            else
+                            {
+                                observation[i - 2] = double.NaN; // Handle non-numeric data
+                            }
+                        }
+
+                        observationsList.Add(observation);
+
+                        if (double.TryParse(fields[numColumns - 1], out double target))
+                        {
+                            targetsList.Add(target);
                         }
                         else
                         {
-                            observation[i - 2] = double.NaN; // Handle non-numeric data
+                            targetsList.Add(double.NaN); // Handle non-numeric target
                         }
                     }
 
-                    observationsList.Add(observation);
+                    // Clean data: Remove rows with NaN values
+                    var cleanObservationsList = new List<double[]>();
+                    var cleanTargetsList = new List<double>();
 
-                    if (double.TryParse(fields[numColumns - 1], out double target))
+                    for (int i = 0; i < observationsList.Count; i++)
                     {
-                        targetsList.Add(target);
+                        if (!observationsList[i].Any(double.IsNaN) && !double.IsNaN(targetsList[i]))
+                        {
+                            cleanObservationsList.Add(observationsList[i]);
+                            cleanTargetsList.Add(targetsList[i]);
+                        }
                     }
-                    else
+
+                    // Convert lists to matrix and array
+                    var observations = new F64Matrix(cleanObservationsList.Count, numColumns - 3);
+                    for (int i = 0; i < cleanObservationsList.Count; i++)
                     {
-                        targetsList.Add(double.NaN); // Handle non-numeric target
+                        for (int j = 0; j < numColumns - 3; j++)
+                        {
+                            observations[i, j] = cleanObservationsList[i][j];
+                        }
                     }
+
+                    var targets = cleanTargetsList.ToArray();
+
+                    return (observations, targets);
                 }
-
-                // Clean data: Remove rows with NaN values
-                var cleanObservationsList = new List<double[]>();
-                var cleanTargetsList = new List<double>();
-
-                for (int i = 0; i < observationsList.Count; i++)
-                {
-                    if (!observationsList[i].Any(double.IsNaN) && !double.IsNaN(targetsList[i]))
-                    {
-                        cleanObservationsList.Add(observationsList[i]);
-                        cleanTargetsList.Add(targetsList[i]);
-                    }
-                }
-
-                // Convert lists to matrix and array
-                var observations = new F64Matrix(cleanObservationsList.Count, numColumns - 2);
-                for (int i = 0; i < cleanObservationsList.Count; i++)
-                {
-                    for (int j = 0; j < numColumns - 2; j++)
-                    {
-                        observations[i, j] = cleanObservationsList[i][j];
-                    }
-                }
-
-                var targets = cleanTargetsList.ToArray();
-
-                return (observations, targets);
             }
         }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"An error occurred: {ex.Message}");
+            return (null, null);
+        }
     }
-    catch (Exception ex)
-    {
-        Console.WriteLine($"An error occurred: {ex.Message}");
-        return (null, null);
-    }
-}
 
     static (F64Matrix TrainingObservations, double[] TrainingTargets, F64Matrix TestingObservations, double[] TestingTargets) SplitData(F64Matrix observations, double[] targets, double trainRatio)
     {
@@ -225,95 +255,97 @@ static (F64Matrix, double[]) LoadCsvAsMatrix(string inputFilePath)
         return values[n / 2];
     }
 
-static double CrossValidate(F64Matrix observations, double[] targets, int k)
-{
-    var metric = new TotalErrorClassificationMetric<double>();
-    var errors = new List<double>();
-    var random = new Random(42);
-
-    // Generate indices for k-fold cross-validation
-    var indices = Enumerable.Range(0, observations.RowCount).OrderBy(x => random.Next()).ToArray();
-    var foldSize = observations.RowCount / k;
-
-    for (int i = 0; i < k; i++)
+    static double CrossValidate(F64Matrix observations, double[] targets, int k)
     {
-        var testIndices = indices.Skip(i * foldSize).Take(foldSize).ToArray();
-        var trainIndices = indices.Except(testIndices).ToArray();
+        var metric = new TotalErrorClassificationMetric<double>();
+        var errors = new List<double>();
+        var random = new Random(42);
 
-        Console.WriteLine($"Fold {i+1}/{k}:");
-        Console.WriteLine($"Training set size: {trainIndices.Length}");
-        Console.WriteLine($"Testing set size: {testIndices.Length}");
+        // Generate indices for k-fold cross-validation
+        var indices = Enumerable.Range(0, observations.RowCount).OrderBy(x => random.Next()).ToArray();
+        var foldSize = observations.RowCount / k;
 
-        if (!trainIndices.Any() || !testIndices.Any())
+        for (int i = 0; i < k; i++)
         {
-            Console.WriteLine("Empty training or testing set. Skipping this fold.");
-            continue; // Skip if no elements in train or test indices
+            var testIndices = indices.Skip(i * foldSize).Take(foldSize).ToArray();
+            var trainIndices = indices.Except(testIndices).ToArray();
+
+            Console.WriteLine($"Fold {i + 1}/{k}:");
+            Console.WriteLine($"Training set size: {trainIndices.Length}");
+            Console.WriteLine($"Testing set size: {testIndices.Length}");
+            /*
+                    if (!trainIndices.Any() || !testIndices.Any())
+                    {
+                        Console.WriteLine("Empty training or testing set. Skipping this fold.");
+                        continue; // Skip if no elements in train or test indices
+                    }
+            */
+            var trainObservations = CreateMatrix(observations, trainIndices);
+            var trainTargets = trainIndices.Select(index => targets[index]).ToArray();
+            var testObservations = CreateMatrix(observations, testIndices);
+            var testTargets = testIndices.Select(index => targets[index]).ToArray();
+
+            Console.WriteLine($"Train observations row count: {trainObservations.RowCount}");
+            Console.WriteLine($"Test observations row count: {testObservations.RowCount}");
+            Console.WriteLine($"Train targets count: {trainTargets.Length}");
+            Console.WriteLine($"Test targets count: {testTargets.Length}");
+
+            var decisionTreeLearner = new ClassificationDecisionTreeLearner(maximumTreeDepth: 1);
+            var adaBoostLearner = new ClassificationAdaBoostLearner(
+                iterations: 50,
+                learningRate: 1.0,
+                maximumTreeDepth: 1
+            );
+
+            var model = adaBoostLearner.Learn(trainObservations, trainTargets);
+
+            if (testObservations.RowCount == 0 || testTargets.Length == 0)
+            {
+                Console.WriteLine("No test observations or test targets. Skipping this fold.");
+                continue; // Skip if no elements in test observations or test targets
+            }
+
+            // Validate test observations before predicting
+            //for (int j = 0; j < testObservations.RowCount; j++)
+            for (int j = 0; j < 5; j++)
+            {
+                var observation = new double[testObservations.ColumnCount];
+                for (int col = 0; col < testObservations.ColumnCount; col++)
+                {
+                    observation[col] = testObservations[j, col];
+                }
+                PrintArray(observation, 9999);
+                
+                            if (observation.All(double.IsNaN))
+                            {
+                                Console.WriteLine($"Empty observation at index {j}. Skipping this observation.");
+                                continue; // Skip empty observations
+                            }
+                
+                try
+                {
+                    var prediction = model.Predict(observation); // Test prediction to catch potential errors
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Prediction error for observation at index {j}: {ex.Message}. Skipping this observation.");
+                    continue; // Skip observations causing errors
+                }
+            }
+
+            var predictions = model.Predict(testObservations);
+
+            var error = metric.Error(testTargets, predictions);
+            errors.Add(error);
         }
 
-        var trainObservations = CreateMatrix(observations, trainIndices);
-        var trainTargets = trainIndices.Select(index => targets[index]).ToArray();
-        var testObservations = CreateMatrix(observations, testIndices);
-        var testTargets = testIndices.Select(index => targets[index]).ToArray();
-
-        Console.WriteLine($"Train observations row count: {trainObservations.RowCount}");
-        Console.WriteLine($"Test observations row count: {testObservations.RowCount}");
-        Console.WriteLine($"Train targets count: {trainTargets.Length}");
-        Console.WriteLine($"Test targets count: {testTargets.Length}");
-
-        var decisionTreeLearner = new ClassificationDecisionTreeLearner(maximumTreeDepth: 1);
-        var adaBoostLearner = new ClassificationAdaBoostLearner(
-            iterations: 50,
-            learningRate: 1.0,
-            maximumTreeDepth: 1
-        );
-
-        var model = adaBoostLearner.Learn(trainObservations, trainTargets);
-
-        if (testObservations.RowCount == 0 || testTargets.Length == 0)
+        if (!errors.Any())
         {
-            Console.WriteLine("No test observations or test targets. Skipping this fold.");
-            continue; // Skip if no elements in test observations or test targets
+            throw new InvalidOperationException("All folds resulted in empty training or testing sets.");
         }
 
-        // Validate test observations before predicting
-        for (int j = 0; j < testObservations.RowCount; j++)
-        {
-            var observation = new double[testObservations.ColumnCount];
-            for (int col = 0; col < testObservations.ColumnCount; col++)
-            {
-                observation[col] = testObservations[j, col];
-            }
-
-            if (observation.All(double.IsNaN))
-            {
-                Console.WriteLine($"Empty observation at index {j}. Skipping this observation.");
-                continue; // Skip empty observations
-            }
-
-            try
-            {
-                var prediction = model.Predict(observation); // Test prediction to catch potential errors
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Prediction error for observation at index {j}: {ex.Message}. Skipping this observation.");
-                continue; // Skip observations causing errors
-            }
-        }
-
-        var predictions = model.Predict(testObservations);
-
-        var error = metric.Error(testTargets, predictions);
-        errors.Add(error);
+        return errors.Average();
     }
-
-    if (!errors.Any())
-    {
-        throw new InvalidOperationException("All folds resulted in empty training or testing sets.");
-    }
-
-    return errors.Average();
-}
 
 
 
