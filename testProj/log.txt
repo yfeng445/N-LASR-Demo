@@ -1,0 +1,45 @@
+
+Fold 1/5:
+Training set size: 405
+Testing set size: 101
+Train observations row count: 405
+Test observations row count: 101
+Train targets count: 405
+Test targets count: 101
+Test observations row count: 101
+
+Fold 2/5:
+Training set size: 405
+Testing set size: 101
+Train observations row count: 405
+Test observations row count: 101
+Train targets count: 405
+Test targets count: 101
+Test observations row count: 101
+
+Fold 3/5:
+Training set size: 405
+Testing set size: 101
+Train observations row count: 405
+Test observations row count: 101
+Train targets count: 405
+Test targets count: 101
+Test observations row count: 101
+
+Fold 4/5:
+Training set size: 405
+Testing set size: 101
+Train observations row count: 405
+Test observations row count: 101
+Train targets count: 405
+Test targets count: 101
+Test observations row count: 101
+
+Fold 5/5:
+Training set size: 405
+Testing set size: 101
+Train observations row count: 405
+Test observations row count: 101
+Train targets count: 405
+Test targets count: 101
+Test observations row count: 101

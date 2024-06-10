@@ -6,9 +6,10 @@ using System.Threading;
 using Microsoft.VisualBasic.FileIO;
 using SharpLearning.AdaBoost.Learners;
 using SharpLearning.DecisionTrees.Learners;
-using SharpLearning.Metrics.Classification;
+using SharpLearning.Metrics.Regression;
 using SharpLearning.Containers.Matrices;
 using SharpLearning.CrossValidation.CrossValidators;
+using SharpLearning.Common.Interfaces;
 using System.Diagnostics;
 
 class Program
@@ -25,15 +26,14 @@ class Program
         Thread elapsedTimeThread = new Thread(() => ShowElapsedTime(stopwatch));
         elapsedTimeThread.Start();
 
-        // Specify the paths to the CSV files
-        string trainFilePath = @"./train_20230201.csv";
-        string predictFilePath = @"./predict_20230201.csv";
+        // Specify the path to the CSV file
+        string inputFilePath = @"./BostonHousing.csv";
 
-        // Load the training dataset
-        var (observations, targets) = LoadCsvAsMatrix(trainFilePath);
+        // Load the dataset and save it as a matrix
+        var (observations, targets) = LoadCsvAsMatrix(inputFilePath);
 
         // Print some basic statistics
-        Console.WriteLine("Training Data Loaded:");
+        Console.WriteLine("Data Loaded:");
         Console.WriteLine($"Number of observations: {observations.RowCount}");
         Console.WriteLine($"Number of features: {observations.ColumnCount}");
         Console.WriteLine($"Number of targets: {targets.Length}");
@@ -51,8 +51,8 @@ class Program
         }
 
         // Initialize and train the AdaBoost model
-        var decisionTreeLearner = new ClassificationDecisionTreeLearner(maximumTreeDepth: 1);
-        var adaBoostLearner = new ClassificationAdaBoostLearner(
+        var decisionTreeLearner = new RegressionDecisionTreeLearner(maximumTreeDepth: 1);
+        var adaBoostLearner = new RegressionAdaBoostLearner(
             iterations: 50,
             learningRate: 1.0,
             maximumTreeDepth: 1
@@ -60,11 +60,14 @@ class Program
         var model = adaBoostLearner.Learn(observations, targets);
 
         // Load the testing dataset
-        var (predictObservations, _) = LoadCsvAsMatrix(predictFilePath, false);
+        var (predictObservations, _) = LoadCsvAsMatrix(inputFilePath, false);
 
         // Make predictions on the testing dataset
         var predictResults = model.Predict(predictObservations);
-        Console.WriteLine($"\nPredictions on predict_20230201.csv: {string.Join(", ", predictResults.Take(10))}..."); // Print first 10 predictions
+        Console.WriteLine($"\nPredictions on BostonHousing.csv: {string.Join(", ", predictResults.Take(10))}..."); // Print first 10 predictions
+
+        // Evaluate the model using the testing dataset
+        EvaluateModel(model, inputFilePath);
 
         // Stop the stopwatch and elapsed time update thread
         stopwatch.Stop();
@@ -73,6 +76,24 @@ class Program
 
         // Print final elapsed time
         Console.WriteLine($"Total Elapsed Time: {stopwatch.Elapsed}");
+    }
+
+    private static void EvaluateModel(IPredictorModel<double> model, string predictFilePath)
+    {
+        var (predictObservations, actualTargets) = LoadCsvAsMatrix(predictFilePath);
+
+        if (predictObservations == null || actualTargets == null || actualTargets.Length == 0)
+        {
+            Console.WriteLine("No targets available for evaluation.");
+            return;
+        }
+
+        var predictions = model.Predict(predictObservations);
+        var metric = new MeanSquaredErrorRegressionMetric();
+        var error = metric.Error(actualTargets, predictions);
+
+        Console.WriteLine($"\nEvaluation on BostonHousing.csv:");
+        Console.WriteLine($"Mean Squared Error: {error}");
     }
 
     private static void PrintMatrix(F64Matrix matrix, int step)
@@ -132,17 +153,17 @@ class Program
                     while (!parser.EndOfData)
                     {
                         string[] fields = parser.ReadFields();
-                        double[] observation = new double[numColumns - (loadTargets ? 3 : 2)]; // Adjusted for 'SYMOBL', 'Date' columns, and the last column if loading targets
+                        double[] observation = new double[numColumns - (loadTargets ? 1 : 0)]; // Adjusted for the last column if loading targets
 
-                        for (int i = 2; i < numColumns - (loadTargets ? 1 : 0); i++) // Skip 'SYMOBL' and 'Date'
+                        for (int i = 0; i < numColumns - (loadTargets ? 1 : 0); i++)
                         {
                             if (double.TryParse(fields[i], out double value))
                             {
-                                observation[i - 2] = value;
+                                observation[i] = value;
                             }
                             else
                             {
-                                observation[i - 2] = double.NaN; // Handle non-numeric data
+                                observation[i] = double.NaN; // Handle non-numeric data
                             }
                         }
 
@@ -168,10 +189,10 @@ class Program
                     }
 
                     // Convert lists to matrix and array
-                    var observations = new F64Matrix(cleanObservationsList.Count, numColumns - (loadTargets ? 3 : 2));
+                    var observations = new F64Matrix(cleanObservationsList.Count, numColumns - (loadTargets ? 1 : 0));
                     for (int i = 0; i < cleanObservationsList.Count; i++)
                     {
-                        for (int j = 0; j < numColumns - (loadTargets ? 3 : 2); j++)
+                        for (int j = 0; j < numColumns - (loadTargets ? 1 : 0); j++)
                         {
                             observations[i, j] = cleanObservationsList[i][j];
                         }
@@ -203,9 +224,12 @@ class Program
 
     static double CrossValidate(F64Matrix observations, double[] targets, int k)
     {
-        var metric = new TotalErrorClassificationMetric<double>();
+        var metric = new MeanSquaredErrorRegressionMetric();
         var errors = new List<double>();
         var random = new Random(42);
+
+        // Clear previous log
+        Logger.ClearLog();
 
         // Generate indices for k-fold cross-validation
         var indices = Enumerable.Range(0, observations.RowCount).OrderBy(x => random.Next()).ToArray();
@@ -216,13 +240,13 @@ class Program
             var testIndices = indices.Skip(i * foldSize).Take(foldSize).ToArray();
             var trainIndices = indices.Except(testIndices).ToArray();
 
-            Console.WriteLine($"\nFold {i + 1}/{k}:");
-            Console.WriteLine($"Training set size: {trainIndices.Length}");
-            Console.WriteLine($"Testing set size: {testIndices.Length}");
+            Logger.Log($"\nFold {i + 1}/{k}:");
+            Logger.Log($"Training set size: {trainIndices.Length}");
+            Logger.Log($"Testing set size: {testIndices.Length}");
 
             if (!trainIndices.Any() || !testIndices.Any())
             {
-                Console.WriteLine("Empty training or testing set. Skipping this fold.");
+                Logger.Log("Empty training or testing set. Skipping this fold.");
                 continue; // Skip if no elements in train or test indices
             }
 
@@ -231,13 +255,13 @@ class Program
             var testObservations = CreateMatrix(observations, testIndices);
             var testTargets = testIndices.Select(index => targets[index]).ToArray();
 
-            Console.WriteLine($"Train observations row count: {trainObservations.RowCount}");
-            Console.WriteLine($"Test observations row count: {testObservations.RowCount}");
-            Console.WriteLine($"Train targets count: {trainTargets.Length}");
-            Console.WriteLine($"Test targets count: {testTargets.Length}");
+            Logger.Log($"Train observations row count: {trainObservations.RowCount}");
+            Logger.Log($"Test observations row count: {testObservations.RowCount}");
+            Logger.Log($"Train targets count: {trainTargets.Length}");
+            Logger.Log($"Test targets count: {testTargets.Length}");
 
-            var decisionTreeLearner = new ClassificationDecisionTreeLearner(maximumTreeDepth: 1);
-            var adaBoostLearner = new ClassificationAdaBoostLearner(
+            var decisionTreeLearner = new RegressionDecisionTreeLearner(maximumTreeDepth: 1);
+                        var adaBoostLearner = new RegressionAdaBoostLearner(
                 iterations: 50,
                 learningRate: 1.0,
                 maximumTreeDepth: 1
@@ -247,19 +271,33 @@ class Program
 
             if (testObservations.RowCount == 0 || testTargets.Length == 0)
             {
-                Console.WriteLine("No test observations or test targets. Skipping this fold.");
+                Logger.Log("No test observations or test targets. Skipping this fold.");
                 continue; // Skip if no elements in test observations or test targets
             }
 
             try
             {
+                Logger.Log($"Test observations row count: {testObservations.RowCount}");
                 var predictions = model.Predict(testObservations);
                 var error = metric.Error(testTargets, predictions);
                 errors.Add(error);
             }
             catch (InvalidOperationException ex)
             {
-                Console.WriteLine($"Prediction error: {ex.Message}. Skipping this fold.");
+                Logger.Log($"Prediction error: {ex.Message}. Skipping this fold.");
+                Logger.Log("Debug info for the problematic fold:");
+
+                // Print the details of the problematic rows
+                for (int j = 0; j < testObservations.RowCount; j++)
+                {
+                    var row = new double[testObservations.ColumnCount];
+                    for (int col = 0; col < testObservations.ColumnCount; col++)
+                    {
+                        row[col] = testObservations[j, col];
+                    }
+                    Logger.Log($"Row {j + 1}: {string.Join(", ", row)}");
+                }
+
                 continue; // Skip if predictions fail
             }
         }
@@ -314,3 +352,29 @@ class Program
         }
     }
 }
+
+public static class Logger
+{
+    private static readonly string logFilePath = "log.txt";
+    private static readonly object lockObj = new object();
+
+    public static void Log(string message)
+    {
+        lock (lockObj)
+        {
+            File.AppendAllText(logFilePath, message + Environment.NewLine);
+        }
+    }
+
+    public static void ClearLog()
+    {
+        lock (lockObj)
+        {
+            if (File.Exists(logFilePath))
+            {
+                File.Delete(logFilePath);
+            }
+        }
+    }
+}
+
