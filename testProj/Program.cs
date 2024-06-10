@@ -38,7 +38,7 @@ class Program
         Console.WriteLine($"Number of features: {observations.ColumnCount}");
         Console.WriteLine($"Number of targets: {targets.Length}");
 
-        bool useCrossValidation = false; // Switch to enable or disable cross-validation
+        bool useCrossValidation = true; // Switch to enable or disable cross-validation
 
         if (useCrossValidation)
         {
