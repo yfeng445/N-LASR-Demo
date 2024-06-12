@@ -27,7 +27,7 @@ class Program
         elapsedTimeThread.Start();
 
         // Specify the path to the CSV file
-        string inputFilePath = @"./BostonHousing.csv";
+        string inputFilePath = @"./train_20230201.csv";
 
         // Load the dataset and save it as a matrix
         var (observations, targets) = LoadCsvAsMatrix(inputFilePath);
